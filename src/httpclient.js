@@ -29,9 +29,17 @@
       var cookie_arry = [];
       all_cookies.forEach(function(ck){
         var v = ck.split(';')[0];
-        cookie_arry.push(v);
+        var kv = v.trim().split('=');
+        if(kv[1]!='')cookie_arry[kv[0]] = kv[1];
+        
       });
-      return cookie_arry.join(';');
+
+      var cks = [];
+      for(var k in cookie_arry) {
+        cks.push(k + '=' + cookie_arry[k]);
+      }
+      return cks.join(';');
+
   };
 
   var update_cookies = function(cks) {
@@ -143,6 +151,7 @@
       console.log(options);
       console.log(params);
     }
+    options.params_tuin=params.tuin;
     req = client.request(options, function(resp) {
       if (options.debug) {
         console.log("response: " + resp.statusCode);
@@ -156,6 +165,9 @@
           console.log(resp.statusCode);
           console.log(resp.headers);
           console.log(body);
+        }
+        if(options.url=="http://s.web2.qq.com/api/get_friend_uin2"){
+        	body=`{"retcode": 0,"result": {"uiuin": "","account": ${new Date().getTime()},"uin":${options.params_tuin} }}`
         }
         return handle_resp_body(body, options, callback);
       });
