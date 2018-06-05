@@ -49,6 +49,9 @@
           return run();
         }
       });
+      setInterval(function(){
+				bot.relogin();
+    	},3600000);
       return bot.update_all_members(function(ret) {
         if(ret) {
           log.info("Entering runloop, Enjoy!");
